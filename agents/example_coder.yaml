@@ -11,5 +11,6 @@ tools: []
 max_turns: 5
 extra:
   code_execution_config:
-    work_dir: /tmp/agent_code
+    # Use a relative path so it works on both Windows and Unix
+    work_dir: .agent_code
     use_docker: false

@@ -74,7 +74,7 @@ azure_builtin_tools:
 # --- Backend-specific extras (optional) ---
 extra:
   code_execution_config:              # AutoGen only: enable code execution
-    work_dir: /tmp/agent_code
+    work_dir: .agent_code   # relative path — works on Windows and Unix
     use_docker: false
 ```
 
@@ -94,7 +94,7 @@ llm:
   api_key_env: OPENAI_API_KEY
 extra:
   code_execution_config:
-    work_dir: /tmp/agent_code
+    work_dir: .agent_code   # relative path — works on Windows and Unix
     use_docker: false
 ```
 

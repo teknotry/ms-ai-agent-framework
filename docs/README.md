@@ -15,6 +15,7 @@ to build, run, and deploy AI agents using Microsoft's agent tools.
 | 4 | [Tools](./04-tools.md) | Use the docs crawler, write custom tools |
 | 5 | [Multi-Agent Pipelines](./05-pipelines.md) | Chain agents with sequential, group chat, or supervisor |
 | 6 | [Deployment](./06-deployment.md) | Deploy locally, to Docker, or Azure Container Apps |
+| 7 | [Windows Setup](./07-windows.md) | PowerShell commands, env vars, known limitations |
 
 ---
 
