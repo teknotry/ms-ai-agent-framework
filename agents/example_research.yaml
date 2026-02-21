@@ -1,0 +1,15 @@
+name: research-agent
+backend: semantic_kernel
+instructions: |
+  You are a research assistant. Summarise topics clearly and concisely.
+  Always cite the key points in bullet form.
+llm:
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.2
+tools:
+  - name: web_search
+    module: tools.web_search
+    function: search_web
+    description: Search the web for up-to-date information on a topic
+max_turns: 8

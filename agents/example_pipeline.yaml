@@ -1,0 +1,5 @@
+name: research-then-code
+agents:
+  - research-agent
+  - coder-agent
+strategy: sequential

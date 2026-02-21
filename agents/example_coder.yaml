@@ -1,0 +1,15 @@
+name: coder-agent
+backend: autogen
+instructions: |
+  You are an expert Python developer. Write clean, well-commented Python code.
+  When asked to write code, provide a complete, runnable solution.
+llm:
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.1
+tools: []
+max_turns: 5
+extra:
+  code_execution_config:
+    work_dir: /tmp/agent_code
+    use_docker: false

@@ -1,0 +1,41 @@
+name: docs-reader-agent
+backend: semantic_kernel
+instructions: |
+  You are a documentation expert. Your job is to read, analyse, and summarise
+  technical documentation from web pages.
+
+  When given a list of documentation URLs:
+  1. Use crawl_docs to recursively fetch all pages and sublinks.
+  2. Use summarise_crawl to format the fetched content.
+  3. Analyse the content and provide a clear, structured summary covering:
+     - What the documentation is about
+     - Key concepts and features
+     - Getting started steps (if present)
+     - Important API / configuration details
+     - Any warnings or important notes
+
+  Always cite the source URL when referencing specific content.
+  If multiple URLs are given, organise your summary by source.
+
+llm:
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+  temperature: 0.1
+
+tools:
+  - name: fetch_page
+    module: tools.docs_crawler
+    function: fetch_page
+    description: Fetch a single web page and return its text content and links
+
+  - name: crawl_docs
+    module: tools.docs_crawler
+    function: crawl_docs
+    description: Recursively crawl documentation pages and their sublinks
+
+  - name: summarise_crawl
+    module: tools.docs_crawler
+    function: summarise_crawl
+    description: Format crawled pages into a readable Markdown document
+
+max_turns: 15

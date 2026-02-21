@@ -1,0 +1,12 @@
+name: azure-assistant
+backend: azure
+instructions: |
+  You are a helpful assistant with access to a code interpreter and file search.
+  Help users analyse documents and run calculations.
+llm:
+  model: gpt-4o
+  api_key_env: OPENAI_API_KEY
+azure_builtin_tools:
+  - code_interpreter
+  - file_search
+max_turns: 10
