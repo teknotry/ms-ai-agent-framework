@@ -29,23 +29,78 @@ cd ms-ai-agent-framework
 
 ---
 
-## Step 2 — Install the Framework
+## Step 2 — Set Up a Virtual Environment (Recommended)
 
-### One-shot install (recommended)
+A virtual environment keeps the framework's dependencies isolated from your global Python
+installation, preventing version conflicts with other projects.
+
+### Option A — Use the setup script (easiest)
+
+**macOS / Linux:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+**Windows:**
+```cmd
+setup.bat
+```
+
+Both scripts automatically:
+1. Check your Python version
+2. Create a `.venv` virtual environment
+3. Install all dependencies (`pip install -e ".[all]"`)
+4. Create your `.env` file from `.env.example`
+
+Then activate the environment:
+```bash
+# macOS / Linux
+source .venv/bin/activate
+
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+
+# Windows (Command Prompt)
+.venv\Scripts\activate.bat
+```
+
+You'll see `(.venv)` in your prompt when it's active.
+
+---
+
+### Option B — Manual setup
 
 ```bash
+# 1. Create virtual environment
+python -m venv .venv
+
+# 2. Activate it
+source .venv/bin/activate       # macOS / Linux
+.venv\Scripts\activate          # Windows
+
+# 3. Install everything
 pip install -e ".[all]"
 ```
 
-This single command installs everything:
-- All agent backends: AutoGen, Semantic Kernel, Azure AI Agent Service
-- Gradio browser UI (`agent ui`)
-- Docker deployment support
-- Docs crawler dependencies (`requests`, `beautifulsoup4`)
+---
+
+### Why use a virtual environment?
+
+| Without `.venv` | With `.venv` |
+|-----------------|--------------|
+| Installs into global Python | Isolated to this project only |
+| Can break other projects | No conflicts with other projects |
+| Hard to clean up | Delete `.venv/` folder to reset cleanly |
+| `agent` command is global | `agent` command only active when `.venv` is active |
+
+> **Note:** `.venv/` is already in `.gitignore` — it won't be committed to git.
+
+---
 
 ### Selective install (keep it lean)
 
-Only install what you actually need:
+If you don't need everything, install only what you use:
 
 ```bash
 pip install -e "."                   # Core only: CLI + config + docs crawler
@@ -54,13 +109,9 @@ pip install -e ".[semantic-kernel]"  # + Semantic Kernel backend
 pip install -e ".[azure]"            # + Azure AI Agent Service backend
 pip install -e ".[ui]"               # + Gradio browser UI
 pip install -e ".[docker]"           # + Docker deployment support
-```
 
-You can also combine extras:
-
-```bash
-pip install -e ".[semantic-kernel,ui]"   # Semantic Kernel + browser UI only
-pip install -e ".[autogen,ui]"           # AutoGen + browser UI only
+# Combine extras
+pip install -e ".[semantic-kernel,ui]"
 ```
 
 ---

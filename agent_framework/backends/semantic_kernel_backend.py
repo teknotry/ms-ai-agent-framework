@@ -64,7 +64,7 @@ class SemanticKernelAgent(BaseAgent):
 
         self._kernel = kernel
         self._agent = ChatCompletionAgent(
-            service_id="chat",
+            service=service,
             kernel=kernel,
             name=self.config.name,
             instructions=self.config.instructions,

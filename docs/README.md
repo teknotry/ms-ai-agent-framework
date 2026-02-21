@@ -22,20 +22,25 @@ to build, run, and deploy AI agents using Microsoft's agent tools.
 ## 5-Minute Quick Start
 
 ```bash
-# 1. Install everything in one shot
-pip install -e ".[all]"
+# 1. Run the setup script (creates .venv + installs everything)
+./setup.sh          # macOS / Linux
+setup.bat           # Windows
 
-# 2. Set API key
-export OPENAI_API_KEY=sk-...
+# 2. Activate the virtual environment
+source .venv/bin/activate        # macOS / Linux
+.venv\Scripts\activate           # Windows
 
-# 3. List available agents
+# 3. Add your API key to .env
+echo "OPENAI_API_KEY=sk-..." >> .env
+export $(cat .env | grep -v '#' | xargs)   # macOS / Linux
+
+# 4. List available agents
 agent list agents/
 
-# 4. Chat in terminal
+# 5. Chat in terminal
 agent chat agents/docs_reader.yaml
 
-# 5. Or open the browser UI
-pip install gradio
+# 6. Or open the browser UI
 agent ui agents/docs_reader.yaml
 ```
 
