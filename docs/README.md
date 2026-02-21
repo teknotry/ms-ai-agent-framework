@@ -21,9 +21,8 @@ to build, run, and deploy AI agents using Microsoft's agent tools.
 ## 5-Minute Quick Start
 
 ```bash
-# 1. Install
-pip install -e ".[semantic-kernel,ui]"
-pip install requests beautifulsoup4
+# 1. Install everything in one shot
+pip install -e ".[all]"
 
 # 2. Set API key
 export OPENAI_API_KEY=sk-...

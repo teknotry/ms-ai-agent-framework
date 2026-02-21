@@ -31,32 +31,36 @@ cd ms-ai-agent-framework
 
 ## Step 2 — Install the Framework
 
-The framework uses optional extras so you only install what you need.
+### One-shot install (recommended)
 
 ```bash
-# Core only (CLI + config, no agent backend)
-pip install -e "."
-
-# AutoGen backend (multi-agent, code execution)
-pip install -e ".[autogen]"
-
-# Semantic Kernel backend (plugin-based agents)
-pip install -e ".[semantic-kernel]"
-
-# Azure AI Agent Service backend
-pip install -e ".[azure]"
-
-# Gradio browser UI
-pip install -e ".[ui]"
-
-# Install everything at once (recommended for development)
 pip install -e ".[all]"
 ```
 
-Also install the docs crawler dependencies (used by the built-in docs reader agent):
+This single command installs everything:
+- All agent backends: AutoGen, Semantic Kernel, Azure AI Agent Service
+- Gradio browser UI (`agent ui`)
+- Docker deployment support
+- Docs crawler dependencies (`requests`, `beautifulsoup4`)
+
+### Selective install (keep it lean)
+
+Only install what you actually need:
 
 ```bash
-pip install requests beautifulsoup4
+pip install -e "."                   # Core only: CLI + config + docs crawler
+pip install -e ".[autogen]"          # + AutoGen backend
+pip install -e ".[semantic-kernel]"  # + Semantic Kernel backend
+pip install -e ".[azure]"            # + Azure AI Agent Service backend
+pip install -e ".[ui]"               # + Gradio browser UI
+pip install -e ".[docker]"           # + Docker deployment support
+```
+
+You can also combine extras:
+
+```bash
+pip install -e ".[semantic-kernel,ui]"   # Semantic Kernel + browser UI only
+pip install -e ".[autogen,ui]"           # AutoGen + browser UI only
 ```
 
 ---

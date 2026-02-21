@@ -13,17 +13,17 @@ A unified Python framework to **build, run, and deploy AI agents** using Microso
 ## Quick Start
 
 ```bash
-# Install (choose the extras you need)
-pip install -e ".[autogen,semantic-kernel]"   # AutoGen + Semantic Kernel backends
-pip install -e ".[ui]"                         # Gradio browser UI
-pip install -e ".[all]"                        # Everything
+# Install everything in one shot
+pip install -e ".[all]"
+
+# Set your API key
+export OPENAI_API_KEY=sk-...
 
 # Scaffold a new project
 agent init my-project
 cd my-project
 
 # Run an agent (one-shot)
-export OPENAI_API_KEY=sk-...
 agent run agents/example_agent.yaml "Write a hello world function in Python"
 
 # Or start an interactive chat
