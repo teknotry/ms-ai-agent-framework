@@ -14,15 +14,23 @@ A unified Python framework to **build, run, and deploy AI agents** using Microso
 
 ```bash
 # Install (choose the extras you need)
-pip install -e ".[autogen,semantic-kernel]"
+pip install -e ".[autogen,semantic-kernel]"   # AutoGen + Semantic Kernel backends
+pip install -e ".[ui]"                         # Gradio browser UI
+pip install -e ".[all]"                        # Everything
 
 # Scaffold a new project
 agent init my-project
 cd my-project
 
-# Run an agent
+# Run an agent (one-shot)
 export OPENAI_API_KEY=sk-...
 agent run agents/example_agent.yaml "Write a hello world function in Python"
+
+# Or start an interactive chat
+agent chat agents/example_agent.yaml
+
+# Or open the browser UI
+agent ui agents/example_agent.yaml
 ```
 
 ---
@@ -51,15 +59,72 @@ max_turns: 5
 ## CLI Reference
 
 ```
-agent init [PROJECT_DIR]                  Scaffold a new project
-agent create <name> --backend <b>         Create agent config template
-agent run <config.yaml> "<message>"       Run a single agent
-agent pipeline run <pipeline.yaml> "<t>"  Run a multi-agent pipeline
-agent deploy local <config.yaml>          Run as local HTTP server
-agent deploy docker <config.yaml>         Build & run in Docker
-agent deploy azure <config.yaml>          Deploy to Azure Container Apps
-agent list [agents-dir]                   List all agent configs
-agent logs <agent-name>                   Stream logs
+agent init [PROJECT_DIR]                        Scaffold a new project
+agent create <name> --backend <b>               Create agent config template
+agent run <config.yaml> "<message>"             Run a single agent (one-shot)
+agent chat <config.yaml>                        Interactive terminal chat loop
+agent ui <config.yaml>                          Launch Gradio browser chat UI
+agent pipeline run <pipeline.yaml> "<task>"     Run a multi-agent pipeline
+agent deploy local <config.yaml>                Run as local HTTP server
+agent deploy docker <config.yaml>               Build & run in Docker
+agent deploy azure <config.yaml>                Deploy to Azure Container Apps
+agent list [agents-dir]                         List all agent configs
+agent logs <agent-name>                         Stream logs
+```
+
+---
+
+## Interactive Chat
+
+### Terminal Chat Loop
+
+Start a back-and-forth conversation with any agent directly in your terminal:
+
+```bash
+agent chat agents/my_agent.yaml
+```
+
+```
+Chatting with 'my-agent' [semantic_kernel]
+Type 'exit' or 'quit' to stop. Type 'reset' to clear conversation history.
+
+You: Summarise https://fastapi.tiangolo.com
+Agent: FastAPI is a modern, fast web framework...
+
+You: What authentication methods does it support?
+Agent: Based on the docs I crawled, FastAPI supports OAuth2, API keys...
+
+You: reset
+[Conversation history cleared]
+
+You: exit
+Goodbye!
+```
+
+**Options:**
+```bash
+agent chat agents/my_agent.yaml --no-color   # plain output, no colours
+```
+
+---
+
+### Gradio Browser UI
+
+Launch a chat window in your browser:
+
+```bash
+# Install Gradio
+pip install gradio
+# or: pip install -e ".[ui]"
+
+agent ui agents/my_agent.yaml
+# → opens http://localhost:7860 automatically
+```
+
+**Options:**
+```bash
+agent ui agents/my_agent.yaml --port 8888    # custom port
+agent ui agents/my_agent.yaml --share        # create a public Gradio share URL
 ```
 
 ---
@@ -99,6 +164,58 @@ tools:
   - name: calculate
     module: tools.my_tool
     function: calculate
+```
+
+---
+
+## Built-in Tools
+
+### Docs Crawler (`tools/docs_crawler.py`)
+
+Reads documentation from URLs and recursively follows sublinks.
+
+| Tool | Description |
+|------|-------------|
+| `fetch_page(url)` | Fetch a single page — returns cleaned text + all links found |
+| `crawl_docs(urls, max_depth, max_pages, ...)` | Recursively crawl from seed URLs |
+| `summarise_crawl(result)` | Format crawl output into readable Markdown |
+
+**Use via the docs-reader agent:**
+```bash
+agent chat agents/docs_reader.yaml
+# You: Read and summarise https://docs.python.org/3/library/asyncio.html
+```
+
+**Use directly in Python:**
+```python
+from tools.docs_crawler import crawl_docs, summarise_crawl
+
+result = crawl_docs(
+    urls=["https://fastapi.tiangolo.com/tutorial/"],
+    max_depth=2,       # follow links 2 levels deep
+    max_pages=20,      # fetch at most 20 pages total
+    stay_on_origin=True,  # only follow links on the same domain
+    delay_seconds=0.3,    # polite delay between requests
+)
+print(f"Fetched {result['total_fetched']} pages")
+print(summarise_crawl(result))
+```
+
+**Agent config reference (`agents/docs_reader.yaml`):**
+```yaml
+name: docs-reader-agent
+backend: semantic_kernel
+instructions: "You are a documentation expert..."
+tools:
+  - name: fetch_page
+    module: tools.docs_crawler
+    function: fetch_page
+  - name: crawl_docs
+    module: tools.docs_crawler
+    function: crawl_docs
+  - name: summarise_crawl
+    module: tools.docs_crawler
+    function: summarise_crawl
 ```
 
 ---
